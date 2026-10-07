@@ -12,6 +12,7 @@ from backend.services.pdf_parser import (
     extract_text,
 )
 from backend.services.resume_parser import parse_resume
+from backend.services.skill_extractor import extract_skills
 
 router = APIRouter(prefix="/resume", tags=["resume"])
 
@@ -30,13 +31,13 @@ def upload_resume(file: UploadFile = File(...)):
     if len(content) > MAX_FILE_SIZE:
         raise HTTPException(400, "File too large (max 5 MB).")
 
-    # Save under a random name so uploads can't overwrite each other
     saved_path = UPLOAD_DIR / f"{uuid.uuid4().hex}{ext}"
     saved_path.write_bytes(content)
 
     try:
         raw_text = extract_text(saved_path)
         parsed = parse_resume(raw_text)
+        skills = extract_skills(parsed["text"])
     except (EmptyResumeError, UnsupportedFileError) as e:
         saved_path.unlink(missing_ok=True)
         raise HTTPException(422, str(e))
@@ -57,7 +58,7 @@ def upload_resume(file: UploadFile = File(...)):
                 parsed["email"],
                 parsed["phone"],
                 json.dumps(parsed["sections"]),
-                json.dumps([]),  # filled in Phase 4
+                json.dumps(skills),
             ),
         )
         conn.commit()
@@ -72,6 +73,7 @@ def upload_resume(file: UploadFile = File(...)):
         "email": parsed["email"],
         "phone": parsed["phone"],
         "sections_found": list(parsed["sections"].keys()),
+        "skills": skills,
         "text_preview": parsed["text"][:300],
     }
 

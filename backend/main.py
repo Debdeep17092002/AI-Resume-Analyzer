@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.models.db import init_db
-from backend.routes import jobs, resume
+from backend.routes import analysis, jobs, resume
 
 
 @asynccontextmanager
@@ -24,6 +24,7 @@ app.add_middleware(
 
 app.include_router(jobs.router)
 app.include_router(resume.router)
+app.include_router(analysis.router)
 
 
 @app.get("/")
