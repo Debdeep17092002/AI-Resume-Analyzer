@@ -86,6 +86,3 @@ parsed fields are stored. Resumes can be removed with `DELETE /resume/{id}`.
 - User accounts and analysis history
 - Larger job dataset
 
-## Screenshots
-
-TODO: add 2-3 screenshots (upload page, result page).
