@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const api = axios.create({ baseURL: "http://localhost:8000" });
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000",
+});
 
 export async function uploadResume(file) {
   const form = new FormData();
@@ -26,7 +28,7 @@ export async function recommendJobs(resumeId) {
 
 export function getErrorMessage(err) {
   if (!err.response) {
-    return "Cannot reach the server. Is the backend running on port 8000?";
+    return "Cannot reach the server. Is the backend running?";
   }
   const detail = err.response.data?.detail;
   return typeof detail === "string" ? detail : "Something went wrong. Please try again.";

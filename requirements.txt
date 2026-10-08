@@ -13,3 +13,4 @@ sqlalchemy
 python-dotenv
 pytest
 jupyter
+httpx
