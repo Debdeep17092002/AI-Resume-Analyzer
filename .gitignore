@@ -8,3 +8,5 @@ node_modules/
 *.db
 ml/models/*.pkl
 .ipynb_checkpoints/
+ml/models/*.joblib
+ml/data/
